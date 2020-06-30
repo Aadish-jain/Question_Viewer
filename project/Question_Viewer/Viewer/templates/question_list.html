@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block question_listactive %}active
+{% endblock question_listactive %}
+
+{% block title %}Question Lists{% endblock %}
+{% block content %}
+
+{% block content_header %}
+<h2>LISTS OF QUESTIONS</h2>
+{% endblock %}
+
+
+<table class="container table mb-0 ">
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Group Name</th>
+      <th>Comment</th>
+      <th>File Format</th>
+      <th>File Name</th>
+      <th>Download</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ques in questions %}
+    <tr>
+      <td>
+        {% if ques.cover %}
+        <style>
+          .modal-content.aa {
+            background-color: transparent;
+            box-shadow: none;
+            border-color: transparent;
+          }
+
+          .closebtn {
+            width: 89px;
+            border-color: blue;
+            margin-left: 80%;
+          }
+
+          .closebtn:hover {
+            background-color: blueviolet;
+            border-color: blue;
+          }
+        </style>
+            <a href="{{  ques.cover.url }}" target="_blank">
+            <img src="{{  ques.cover.url }}" alt="{{ question_file.name }}" style="width:100px;">
+            </a>
+        <!----modal starts here--->
+        <div id="aadishimgmodal" class="modal fade" role='dialog'>
+          <div class="modal-dialog modal-lg ">
+            <div class="modal-content aa">
+              <div class="modal-body">
+                <img src="{{ ques.cover.url }}" alt="{{ question_file.name }}" style="width:100%;height:100%;">
+              </div>
+              <button type="button" class="btn btn-default closebtn" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <span class="text-muted">No cover</span>
+        {% endif %}
+      </td>
+      <td>{{ques.group_id}} </td>
+      <td>{{ ques.comment }}</td>
+      {% if ques.question_file.name %}
+      <td>File in <b>{{ ques.question_file.name | slice:'-4:' }}</b> Format</td>
+      {% else %}
+      <td> No File </td>
+      {% endif %}
+
+      <td>
+        {% if ques.question_file %}
+        <i>{{ques.question_file.name|truncatechars:30}}</i>
+        {% else %}
+        <b>Question File Not Present. </b>
+        {% endif %}
+      </td>
+      <td>
+        {% if not ques.question_file %}
+        <a href="{{ ques.question_file }}" class="btn btn-primary btn-sm disabled" target="_blank">
+          Download File
+        </a>
+        <a href="{{ ques.question_file }}" class="btn btn-primary btn-sm disabled  my-3" target="_blank">
+          View
+        </a>
+        {% else %}
+        <a href="{{ ques.question_file.url }}" class="btn btn-primary btn-sm " target="_blank">
+          Download File
+        </a>
+        <!-- Button HTML (to Trigger iFrame in Modal) -->
+        <div>
+          {% include 'iframe.html' %}
+        </div>
+
+        {% endif %}
+      </td>
+      <td>
+        <form method="post" action="{% url 'delete_question' ques.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

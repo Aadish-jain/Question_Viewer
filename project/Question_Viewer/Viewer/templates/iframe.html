@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   
+    <style>
+        .bs-example {
+            margin: 20px;
+        }
+        .modal-content {
+            height: 120% !important;
+        }
+        .modal-content iframe {
+            margin: 0 auto;
+        }
+
+        .modal-body {
+            width: 111% !important;
+
+        }
+
+        .modal-dialog {
+            width: 90%;
+            height: 500px !important;
+        }
+
+       
+
+        .modal-content {
+            height: 100%;
+        }
+
+        .closebtn {
+            width: 89px;
+            border-color: blue;
+            margin-left: 80%;
+        }
+
+        .closebtn:hover {
+            background-color: blueviolet;
+            border-color: blue;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            var url = $("#doc").attr('src');
+            $("#myModal").on('hide.bs.modal', function () {
+                $("#doc").attr('src', '');
+            });
+            $("#myModal").on('show.bs.modal', function () {
+                $("#doc").attr('src', url);
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="bs-example">
+        <!-- Button HTML (to Trigger Modal) -->
+        <a href="#myModal" class="btn btn-primary btn-sm my-3" data-toggle="modal">View</a>
+
+        <!-- Modal HTML -->
+        <div id="myModal" class="modal fade modal-xl">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content modal-xl">
+                    <div class="modal-body modal-xl">
+                        <iframe id="doc" width="90%" height="500"
+                            src="{{ ques.question_file.url }}" frameborder="0"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <button type="button" class=" btn-lg btn-primary closebtn" data-dismiss="modal"
+                        aria-hidden="true">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
